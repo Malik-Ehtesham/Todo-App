@@ -1,13 +1,20 @@
-import Todo from "@app/models/Todo";
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+
 import { connectToDB } from "@app/utils/database";
-import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../auth/[...nextauth]/route";
+import Todo from "@app/models/Todo";
 
 // FOR GETTING ALL TODOS
 export async function GET(req, res) {
   try {
     await connectToDB();
 
-    const allTodos = await Todo.find();
+    const session = await getServerSession(authOptions);
+
+    const email = session.user.email;
+
+    const allTodos = await Todo.find({ email: email });
 
     return NextResponse.json({
       data: allTodos,
@@ -32,10 +39,9 @@ export async function POST(req, res) {
 
     const todo = await Todo.create({
       task: body.task,
+      email: body.email,
       completed: body.completed,
     });
-
-    console.log(todo);
 
     return NextResponse.json({
       data: todo,

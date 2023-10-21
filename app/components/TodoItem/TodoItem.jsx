@@ -1,16 +1,29 @@
 "use client";
-import { useSelector, useDispatch } from "react-redux";
 
-import { deleteTodos } from "@store/features/todo/todoSlice";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
-import Bin from "public/bin.png";
+import {
+  updateTodos,
+  deleteTodos,
+  fetchTodos,
+} from "@store/features/todo/todoSlice";
 
 const TodoItem = ({ task, id }) => {
+  // VARIABLES DECALARATION
   const dispatch = useDispatch();
 
+  // HANDLERS
   const deleteTaskHandler = () => {
-    dispatch(deleteTodos(id));
+    dispatch(deleteTodos({ id, toast }));
   };
+
+  const completeTodoHandler = () => {
+    dispatch(
+      updateTodos({ id: id, fetchTodos: fetchTodos, dispatch: dispatch, toast })
+    );
+  };
+
   return (
     <label className="flex  items-center w-5/6 sm:w-full md:w-140 lg:w-150 my-3">
       <div className="input-group">
@@ -36,7 +49,11 @@ const TodoItem = ({ task, id }) => {
           </svg>
         </button>
       </div>
-      <input type="checkbox" className="checkbox checkbox-info mx-2 " />
+      <input
+        type="checkbox"
+        className="checkbox checkbox-info mx-2 "
+        onClick={completeTodoHandler}
+      />
     </label>
   );
 };

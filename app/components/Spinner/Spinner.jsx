@@ -1,11 +1,9 @@
 import React from "react";
 
+import "./Spinner.css";
+
 const Spinner = () => {
-  return (
-    <div>
-      <img src="../../utils/Spinner.png" />
-    </div>
-  );
+  return <div class="lds-dual-ring"></div>;
 };
 
 export default Spinner;

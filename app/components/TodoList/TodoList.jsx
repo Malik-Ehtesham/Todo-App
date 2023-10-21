@@ -1,25 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
-
-import { useSelector, useDispatch } from "react-redux";
-
-import { fetchTodos } from "@store/features/todo/todoSlice";
+import { useSelector } from "react-redux";
 
 import TodoItem from "../TodoItem/TodoItem";
-import Spinner from "../Spinner/Spinner";
 
 const TodoList = () => {
+  // VARIABLES DECALARATION
   const todo = useSelector((state) => state.todo);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchTodos());
-  }, []);
+
+  const incompletedTodos = todo.todos.filter((todo) => {
+    return todo.completed !== true;
+  });
 
   return (
     <div className="flex justify-center flex-col">
-      <Spinner />
-      {todo.todos.map((todo) => (
+      {incompletedTodos.length > 0 ? (
+        <p className="text-xl my-3 font-semibold text-sky-500 text-center">
+          YOUR TODOS
+        </p>
+      ) : null}
+
+      {incompletedTodos.map((todo) => (
         <TodoItem key={todo._id} task={todo.task} id={todo._id} />
       ))}
     </div>
